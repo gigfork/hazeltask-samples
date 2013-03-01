@@ -2,31 +2,21 @@ package com.hazeltask.samples.sample3;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 import com.hazeltask.Hazeltask;
-import com.hazeltask.config.ExecutorConfig;
 import com.hazeltask.config.HazeltaskConfig;
-import com.hazeltask.config.helpers.AbstractTaskRouterFactory;
-import com.hazeltask.core.concurrent.collections.router.ListRouter;
-import com.hazeltask.core.concurrent.collections.router.LoadBalancedRouter;
-import com.hazeltask.core.concurrent.collections.tracked.ITrackedQueue;
-import com.hazeltask.executor.task.TaskIdAdapter;
+import com.hazeltask.core.concurrent.collections.grouped.Groupable;
 
 public class Sample3ProducerMain {
 
     public static void main(String[] args) throws Exception {
-        HazeltaskConfig config = new HazeltaskConfig()
-        .withTopologyName("MyTopology")
-        .withExecutorConfig(new ExecutorConfig<Long, Priority>()
-            .withTaskIdAdapter(new MyTaskIdAdapter())
-            .withTaskRouterFactory(new MyListRouterFactory()) 
-            .disableWorkers()
-         );
+        HazeltaskConfig config = Configuration.getConfig();
+        
+        //disable workers on the producer so its easier to see work
+        //being distributed to worker nodes
+        config.getExecutorConfig().disableWorkers();
+        
         ExecutorService executorService = Hazeltask.newHazeltaskInstance(config).getExecutorService();
         
         //add in a bunch of low priority tasks
@@ -34,7 +24,7 @@ public class Sample3ProducerMain {
             executorService.execute(new MyTask(i, Priority.LOW));
         
         //add in a few high priority tasks
-        executorService.execute(new MyTask(2, Priority.HIGH));
+        executorService.execute(new MyTask(1, Priority.HIGH));
         executorService.execute(new MyTask(3, Priority.HIGH));
         executorService.execute(new MyTask(4, Priority.HIGH));
         
@@ -42,30 +32,10 @@ public class Sample3ProducerMain {
     }
 
     //comparitor to help sort priorities... lower is higher priority
-    static class PriorityComparator implements Comparator<Entry<Priority, ITrackedQueue<?>>> {
-        public int compare(Entry<Priority, ITrackedQueue<?>> o1, Entry<Priority, ITrackedQueue<?>> o2) {
-            return o1.getKey().compareTo(o2.getKey());
+    static class PriorityComparator implements Comparator<Priority> {
+        public int compare(Priority o1, Priority o2) {
+            return o1.compareTo(o2);
         }
-    }
-    
-    //factory that creates the router to use
-    static class MyListRouterFactory extends AbstractTaskRouterFactory<Long, Priority>{
-        @Override
-        public ListRouter<Entry<Priority, ITrackedQueue<?>>> createTaskRouter(
-                Callable<List<Entry<Priority, ITrackedQueue<?>>>> listAcessor) {
-            return new LoadBalancedRouter<Map.Entry<Priority,ITrackedQueue<?>>>(listAcessor, new PriorityComparator());
-        } 
-    }
-    
-    //adapter that helps the task system identift a task (id and group)
-    public static class MyTaskIdAdapter implements TaskIdAdapter<MyTask, Long, Priority> {
-        public Long getTaskId(MyTask task) {
-            return task.id;
-        }
-
-        public Priority getTaskGroup(MyTask task) {
-            return task.priority;
-        }  
     }
     
     static enum Priority {
@@ -74,7 +44,7 @@ public class Sample3ProducerMain {
     }
     
     //the task must always implement Serializable or dataserializable
-    public static class MyTask implements Serializable, Runnable {
+    public static class MyTask implements Serializable, Runnable, Groupable<Priority> {
         private static final long serialVersionUID = 1L;
         
         final long id;
@@ -93,6 +63,10 @@ public class Sample3ProducerMain {
                 e.printStackTrace();
             }
            System.out.println("Worked on "+id);
+        }
+
+        public Priority getGroup() {
+            return priority;
         }
     }
 }

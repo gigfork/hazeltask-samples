@@ -8,8 +8,8 @@ import java.util.concurrent.Future;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazeltask.Hazeltask;
-import com.hazeltask.config.ExecutorConfig;
 import com.hazeltask.config.HazeltaskConfig;
+import com.hazeltask.config.defaults.ExecutorConfigs;
 
 public class Sample2ProducerMain {
 
@@ -17,9 +17,11 @@ public class Sample2ProducerMain {
         HazeltaskConfig config = new HazeltaskConfig()
             .withHazelcastInstance(Hazelcast.getDefaultInstance())
             .withTopologyName("MyTopology")
-            .withExecutorConfig(new ExecutorConfig()
-                //we will not allow the producer to work on work
-                .withDisableWorkers(true));
+            .withExecutorConfig(
+                    ExecutorConfigs.basic()
+                        .withDisableWorkers(true) //we will not allow the producer to work on work
+             ); 
+                
         
         ExecutorService executorService = Hazeltask.newHazeltaskInstance(config).getExecutorService();
         Thread.sleep(5000);
