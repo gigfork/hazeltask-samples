@@ -43,6 +43,7 @@ public class Sample2ProducerMain {
         //should print out numbers  11 through 110 and indicate the worker id they were done on
     }
     
+    //TODO: make this a different type of task
     public static class AddTenTask implements Callable<String>, Serializable {
         private static final long serialVersionUID = 1L;
         
