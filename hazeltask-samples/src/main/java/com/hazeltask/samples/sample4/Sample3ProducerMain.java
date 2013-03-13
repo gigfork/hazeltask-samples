@@ -1,4 +1,4 @@
-package com.hazeltask.samples.sample3;
+package com.hazeltask.samples.sample4;
 
 import java.io.Serializable;
 import java.util.Comparator;
