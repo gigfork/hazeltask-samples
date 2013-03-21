@@ -6,7 +6,7 @@ import com.hazeltask.config.defaults.ExecutorConfigs;
 public class Configuration {
     public static HazeltaskConfig getConfig() {
         return new HazeltaskConfig()
-        .withTopologyName("MyTopology")
+        .withName("MyTopology")
         .withExecutorConfig(
              ExecutorConfigs.basic()
          );

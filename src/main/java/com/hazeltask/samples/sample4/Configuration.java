@@ -10,11 +10,11 @@ import com.hazeltask.samples.sample4.Sample3ProducerMain.Priority;
 public class Configuration {
     public static HazeltaskConfig getConfig() {
         return new HazeltaskConfig()
-        .withTopologyName("MyTopology")
+        .withName("MyTopology")
         .withExecutorConfig(
                 ExecutorConfigs.<Priority>basicGroupable()
                     .withLoadBalancingConfig(
-                         new ExecutorLoadBalancingConfig<UUID, Priority>()
+                         new ExecutorLoadBalancingConfig<Priority>()
                                 .useEnumOrdinalPrioritizer(Priority.class)
                     )          
          );

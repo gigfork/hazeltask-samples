@@ -10,18 +10,21 @@ import com.hazelcast.core.Hazelcast;
 import com.hazeltask.Hazeltask;
 import com.hazeltask.config.HazeltaskConfig;
 import com.hazeltask.config.defaults.ExecutorConfigs;
+import com.hazeltask.config.defaults.HazeltaskConfigs;
+import com.hazeltask.config.defaults.HazeltaskConfigs.HazeltaskSimpleConfig;
 
 public class Sample2ProducerMain {
 
-    public static void main(String[] args) throws Exception {
-        HazeltaskConfig config = new HazeltaskConfig()
-            .withHazelcastInstance(Hazelcast.getDefaultInstance())
-            .withTopologyName("MyTopology")
-            .withExecutorConfig(
-                    ExecutorConfigs.basic()
-                        .withDisableWorkers(true) //we will not allow the producer to work on work
-             ); 
-                
+    @SuppressWarnings("deprecation")
+    public static void main(String[] args) throws Exception { 
+         
+        HazeltaskSimpleConfig config = HazeltaskConfigs.basic();
+        config.withHazelcastInstance(Hazelcast.getDefaultInstance())
+              .withName("MyTopology")
+              .withExecutorConfig(
+                      ExecutorConfigs.basic()
+                          .withDisableWorkers(true) //we will not allow the producer to work on work
+               );
         
         ExecutorService executorService = Hazeltask.newHazeltaskInstance(config).getExecutorService();
         Thread.sleep(5000);
@@ -56,7 +59,7 @@ public class Sample2ProducerMain {
         public String call() throws Exception {
             Thread.currentThread().sleep(2000);
             System.out.println("work on "+i);
-            return "Worker "+Hazeltask.getHazeltaskInstanceByTopology("MyTopology").getId()+" worked on: "+(this.i + 10);
+            return "Worker "+Hazeltask.getInstanceByName("MyTopology").getId()+" worked on: "+(this.i + 10);
         }
     }
 

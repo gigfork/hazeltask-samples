@@ -8,7 +8,7 @@ import com.hazeltask.samples.tasks.AddTenTask;
 
 public class Sample5_1Main {
     public static void main(String[] args) throws Exception {
-        DistributedExecutorService<?,?> executorService = Hazeltask.newHazeltaskInstance(Configuration.getConfig())
+        DistributedExecutorService<?> executorService = Hazeltask.newHazeltaskInstance(Configuration.getConfig())
                                                    .getExecutorService();
         
         for(int i =1; i<=10; i++) {

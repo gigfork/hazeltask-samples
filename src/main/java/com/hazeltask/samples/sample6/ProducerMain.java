@@ -14,7 +14,7 @@ public class ProducerMain {
     public static void main(String[] args) {
         HazeltaskConfig config = Configuration.getConfig();
         config.getExecutorConfig().disableWorkers();
-        DistributedExecutorService<?,?> executorService = Hazeltask.newHazeltaskInstance(config)
+        DistributedExecutorService<?> executorService = Hazeltask.newHazeltaskInstance(config)
                                                    .getExecutorService();
         
         System.out.println("Submitting 20 items");
