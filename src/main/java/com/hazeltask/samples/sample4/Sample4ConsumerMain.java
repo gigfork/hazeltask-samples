@@ -6,9 +6,9 @@ import com.hazeltask.Hazeltask;
 import com.hazeltask.HazeltaskInstance;
 import com.hazeltask.config.HazeltaskConfig;
 import com.hazeltask.executor.task.HazeltaskTask;
-import com.hazeltask.samples.sample4.Sample3ProducerMain.MyTask;
+import com.hazeltask.samples.sample4.Sample4ProducerMain.MyTask;
 
-public class Sample3ConsumerMain {
+public class Sample4ConsumerMain {
 
     /**
      * @param args
@@ -32,6 +32,7 @@ public class Sample3ConsumerMain {
             HazeltaskTask task = ((HazeltaskTask)r);
             System.out.println(((MyTask)task.getInnerRunnable()).id);
         }
+        config.getHazelcast().getLifecycleService().shutdown();
     }
 
 }

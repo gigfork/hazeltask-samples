@@ -15,6 +15,7 @@ public class BarTask implements IMyTask {
     }
 
     public String call() throws Exception {
+        System.out.println(name);
         return "Bar: Hello "+name;
     }
 }

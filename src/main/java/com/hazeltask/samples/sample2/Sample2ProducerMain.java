@@ -30,7 +30,7 @@ public class Sample2ProducerMain {
         Thread.sleep(5000);
         ArrayList<Future<String>> results = new ArrayList<Future<String>>();
         System.out.println("Submitting 100 items");
-        for(int i =1; i<=100; i++) {
+        for(int i =1; i<=400; i++) {
             results.add(
                executorService.submit(new AddTenTask(i))
             );

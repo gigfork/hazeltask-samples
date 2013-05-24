@@ -8,7 +8,7 @@ import com.hazeltask.Hazeltask;
 import com.hazeltask.config.HazeltaskConfig;
 import com.hazeltask.core.concurrent.collections.grouped.Groupable;
 
-public class Sample3ProducerMain {
+public class Sample4ProducerMain {
 
     public static void main(String[] args) throws Exception {
         HazeltaskConfig config = Configuration.getConfig();

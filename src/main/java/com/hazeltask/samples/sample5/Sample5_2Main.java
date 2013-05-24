@@ -37,11 +37,11 @@ public class Sample5_2Main {
         }
         
         public Integer call() throws Exception {
-            if(i%2 == 0) {
+           if(i%2 == 0) {
                 throw new RuntimeException("Pretend error on "+i);
-            }
+           }
             
-            return this.i + 10;
+           return this.i + 10;
         }
     }
 

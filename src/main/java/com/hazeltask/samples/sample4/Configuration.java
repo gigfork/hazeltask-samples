@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.hazeltask.config.ExecutorLoadBalancingConfig;
 import com.hazeltask.config.HazeltaskConfig;
 import com.hazeltask.config.defaults.ExecutorConfigs;
-import com.hazeltask.samples.sample4.Sample3ProducerMain.Priority;
+import com.hazeltask.samples.sample4.Sample4ProducerMain.Priority;
 
 public class Configuration {
     public static HazeltaskConfig getConfig() {
